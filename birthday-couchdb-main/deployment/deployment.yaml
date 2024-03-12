@@ -1,0 +1,27 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: couchdb
+  labels:
+    app: couchdb
+spec:
+  selector:
+    matchLabels:
+      app: couchdb
+  template:
+    metadata:
+      labels:
+        app: couchdb
+    spec:
+      containers:
+      - image: haraldu/dhbw-couch:1
+        imagePullPolicy: IfNotPresent
+        name: couchdb
+        ports:
+        - containerPort: 5984
+        readinessProbe:
+          httpGet:
+            path: /_up
+            port: 5984
+          initialDelaySeconds: 5
+          periodSeconds: 30

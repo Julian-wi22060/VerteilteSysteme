@@ -1,3 +1,4 @@
 Flask
 flasgger
 requests
+flask_swagger_ui

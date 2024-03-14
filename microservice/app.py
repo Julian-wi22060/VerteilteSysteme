@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_swagger_ui import get_swaggerui_blueprint
 import requests
 from urllib.parse import urljoin
 import os
@@ -62,6 +63,24 @@ def health():
         return 'Timeout', 500
     except Exception as e:
         return str(e), 500
+    
+def create_swagger_ui(app):
+    SWAGGER_URL = '/swagger'  # URL für den Zugriff auf die Swagger-Oberfläche
+    API_URL = '/static/swagger.yaml'   # URL zur API-Konfiguration
+
+    # Konfiguration der Swagger-Oberfläche
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,   # Swagger URL
+        API_URL,       # URL zur API-Konfiguration
+        config={       # Optionale Konfigurationseinstellungen
+            'app_name': "Birthday API"
+        }
+    )
+
+    # Registrieren Sie die Swagger-Oberfläche in Ihrer Flask-Anwendung
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+
+create_swagger_ui(app)
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)

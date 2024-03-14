@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  title: Birthday Query Microservice
+  description: Microservice to query birthdays from CouchDB
+  version: '1.0'
+servers:
+  - url: http://localhost:8000
+paths:
+  /api/v1/get_data:
+    get:
+      summary: Query birthdays by date
+      parameters:
+        - name: month
+          in: query
+          required: true
+          description: The month (1-12)
+          schema:
+            type: integer
+        - name: day
+          in: query
+          required: true
+          description: The day (1-31)
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    profession:
+                      type: string
+                    year:
+                      type: integer
+                    month:
+                      type: integer
+                    day:
+                      type: integer
+        '204':
+          description: No content
+        '401':
+          description: Invalid credentials
+        '500':
+          description: Internal server error
+  /health:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: Healthy
+        '500':
+          description: Unhealthy

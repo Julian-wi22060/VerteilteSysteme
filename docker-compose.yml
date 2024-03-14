@@ -1,0 +1,26 @@
+version: '3'
+services:
+  couchdb:
+    image: dhbw-couch:1
+    ports:
+      - "5984:5984"
+    networks:
+      - my_network
+    environment:
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: student
+
+  microservice:
+    build: ./microservice
+    ports:
+      - "5000:5000"
+    networks:
+      - my_network
+    depends_on:
+      - couchdb
+    environment:
+      - FLASK_ENV=development
+
+networks:
+  my_network:
+    driver: bridge

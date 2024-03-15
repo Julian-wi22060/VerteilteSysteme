@@ -11,13 +11,13 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Kopieren Sie den Rest des Codes in das Arbeitsverzeichnis
-COPY . .
+COPY ./../src/. .
 
 # Öffnen Sie den Port, auf dem Ihr Flask-Server läuft (z. B. 8000)
 EXPOSE 8000
 
 # Befehl zum Ausführen Ihres Flask-Servers innerhalb des Containers
-CMD ["python", "microservice/app.py"]
+CMD ["python", "app.py"]
 
 # docker build -t flask-app .
 # docker run -d -p 8000:8000 flask-app

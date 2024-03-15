@@ -6,11 +6,13 @@ import os
 
 app = Flask(__name__)
 
+'''
 # Laden der Konfigurationsdatei
-config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'dev.cfg')
+config_path = os.path.join(os.path.dirname(__file__), '..', 'cfg', 'config.cfg')
 app.config.from_pyfile(config_path)
+'''
 
-# Ersetzen Sie den Hostnamen in Ihrer DB_URL-Konfiguration durch die IP-Adresse Ihres Hosts und den Port, auf den Sie den CouchDB-Container weiterleiten
+# Port-Forwarding des CouchDB-Containers
 app.config['DB_NAME'] = 'http://localhost:5984/birthday_db'
 
 # Funktion für den Daten-Endpoint
@@ -49,7 +51,7 @@ def get_data():
             return 'Internal Server Error', 500
     except Exception as e:
         return str(e), 500
-    
+
 # Funktion für den Health-Endpoint
 @app.route('/health', methods=['GET'])
 def health():
@@ -63,7 +65,7 @@ def health():
         return 'Timeout', 500
     except Exception as e:
         return str(e), 500
-    
+
 def create_swagger_ui(app):
     SWAGGER_URL = '/swagger'  # URL für den Zugriff auf die Swagger-Oberfläche
     API_URL = '/static/swagger.yaml'   # URL zur API-Konfiguration

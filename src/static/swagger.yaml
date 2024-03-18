@@ -23,11 +23,12 @@ paths:
       responses:
         '200':
           description: OK
-
         '204':
           description: No content
         '401':
           description: Invalid credentials
+        '408':
+          description: Timeout
         '500':
           description: Internal server error
   /health:

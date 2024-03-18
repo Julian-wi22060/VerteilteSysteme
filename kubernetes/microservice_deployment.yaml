@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice
+  labels:
+    app: microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice
+  template:
+    metadata:
+      labels:
+        app: microservice
+    spec:
+      containers:
+      - name: microservice-container
+        image: dein-microservice-image:tag # hier richtiges image & tag eintragen
+        ports:
+        - containerPort: 4000
+        env:
+        - name: COUCHDB_URL  # Umgebung variable für die CouchDB-Verbindung
+          value: "http://couchdb:5984"  # URL für die CouchDB-Verbindung innerhalb des Kubernetes-Clusters

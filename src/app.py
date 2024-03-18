@@ -4,12 +4,18 @@ import requests
 import os
 
 app = Flask(__name__)
+app.json.sort_keys = False
 
 
 def config_path():
     if os.environ.get('IS_PROD') is not None:
-        print(f'Running in production mode: {os.environ.get("IS_PROD")}')
+        print(f'Running in production/docker mode: {os.environ.get("IS_PROD")}')
         return 'config_docker.cfg'
+
+    elif os.getenv('KUBERNETES'):
+        configfile = os.path.join(os.path.dirname(_file), 'config_micro.json')
+        print(f'Running in kubernetes mode: {os.environ.get("KUBERNETES")}')
+        return '../kubernetes/deployment.yaml'
 
     print('Running in development mode: True')
     return '../cfg/config.cfg'
@@ -26,7 +32,7 @@ app.config['DB_NAME'] = 'http://localhost:5984/birthday_db'
 # Funktion für den Daten-Endpoint
 @app.route('/api/v1/get_data', methods=['GET'])
 def get_data():
-    month = request.args.get('month')
+    month = int(request.args.get('month')) - 1
     day = request.args.get('day')
 
     # Erstelle das Mango-Query JSON-Objekt für CouchDB
@@ -51,9 +57,9 @@ def get_data():
         if data.get('docs'):
             # Extrahiere die relevanten Daten aus dem JSON
             extracted_data = [
-                {'born': doc['day'] + '.' + str(int(doc['month']) + 1) + '.' + doc['year'],
-                 'name': doc['first'] + ' ' + doc['name'],
-                 'profession': doc['prof']
+                {'name': doc['first'] + ' ' + doc['name'],
+                 'profession': doc['prof'],
+                 'born': doc['day'] + '.' + str(int(doc['month']) + 1) + '.' + doc['year']
                  } for doc in data['docs']]
             return jsonify(extracted_data), 200
         else:

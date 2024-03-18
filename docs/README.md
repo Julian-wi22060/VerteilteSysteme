@@ -57,7 +57,7 @@ Im lokalen Betrieb und im Betrieb mit Docker ist die API-Dokumentation unter dem
 
 #### Kubernetes initialisieren<br>
 Erstellt den Docker Container zur Verwendung im Kubernetes Cluster.<br>
-1. `docker build -t micronetes .`<br><br>
+1. `docker build -t julian . -f src/Dockerfile`<br><br>
 Startet den Minikube Cluster.<br>
 2. `minikube start`<br><br>
 Lädt das Docker Image in das Minikube-Cluster.<br>

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  URL: "http://couchdb:5984"
+  DB: "birthday_db"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: credentials
+data:
+  CRED1: "c3R1ZGVudAo="
+  CRED2: "YWRtaW4K"

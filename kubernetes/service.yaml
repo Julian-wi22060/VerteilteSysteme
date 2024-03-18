@@ -7,7 +7,21 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 5984 
+    - port: 5984
       name: http
   selector:
     app: couchdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: julian-microservice
+  labels:
+    app: julian-microservice
+spec:
+  type: NodePort
+  ports:
+    - port: 5000
+      name: http
+  selector:
+    app: julian-microservice

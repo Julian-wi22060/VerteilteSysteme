@@ -9,16 +9,16 @@ paths:
       summary: Query birthdays by date
       description: Dieser Endpunkt ermöglicht es Ihnen, anhand eines eingegebenen Monats (entsprechend der JavaScript-Konvention, wobei Januar 0 und Dezember 11 ist) und eines Tags nach einer Person zu suchen, die an diesem Datum Geburtstag hat. Der Endpunkt gibt eine erfolgreiche Antwort mit dem Statuscode 200 zurück, wenn eine Person mit dem Geburtstag gefunden wird. Wenn keine Person aus der Datenbank an diesem Datum Geburtstag hat, wird der Statuscode 204 zurückgegeben.
       parameters:
-        - name: month
-          in: query
-          required: true
-          description: The month (1-12)
-          schema:
-            type: integer
         - name: day
           in: query
           required: true
           description: The day (1-31)
+          schema:
+            type: integer
+        - name: month
+          in: query
+          required: true
+          description: The month (1-12)
           schema:
             type: integer
       responses:

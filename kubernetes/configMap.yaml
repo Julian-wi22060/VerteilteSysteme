@@ -1,15 +1,17 @@
+# Creates a ConfigMap with configuration data for the application
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: config
+  name: config  # The name of the ConfigMap
 data:
-  URL: "http://couchdb:5984"
-  DB: "birthday_db"
+  URL: "http://couchdb:5984"  # The URL of CouchDB
+  DB: "birthday_db"  # The name of the database
 ---
+# Creates a Secret with credentials for the application
 apiVersion: v1
 kind: Secret
 metadata:
-  name: credentials
+  name: credentials  # The name of the Secret
 data:
-  CRED1: "c3R1ZGVudAo="
-  CRED2: "YWRtaW4K"
+  CRED1: "c3R1ZGVudAo="  # Base64-encoded credentials 1
+  CRED2: "YWRtaW4K"  # Base64-encoded credentials 2

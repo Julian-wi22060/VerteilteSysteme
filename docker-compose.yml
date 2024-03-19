@@ -1,23 +1,35 @@
 version: '3.9'
 
 services:
+  # Flask application service
   flask-app:
+    # Name of the container for the Flask application
     container_name: microservice
+    # Docker image for the Flask application
     image: julian-microservice
+    # Build configuration for the Docker image
     build:
       context: .
       dockerfile: src/Dockerfile
+    # Expose port 4000 on the host and map it to port 4000 in the container
     ports:
       - "4000:4000"
+    # Dependence on the CouchDB service
     depends_on:
-        - couchdb
+      - couchdb
+    # Environment variables passed to the Flask application
     environment:
       - DOCKER=True
+    # Mount the config_docker.json file from the host to the container
     volumes:
       - ./cfg/config_docker.json:/app/config_docker.json
 
+  # CouchDB service
   couchdb:
+    # Name of the container for CouchDB
     container_name: couchdb
+    # Docker image for CouchDB
     image: dhbw-couch:1
+    # Expose port 5984 on the host and map it to port 5984 in the container
     ports:
       - "5984:5984"

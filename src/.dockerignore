@@ -1,6 +1,5 @@
 # Dockerignore file
 
-../config
 README.md
 src/Dockerfile
 docker-compose.yml

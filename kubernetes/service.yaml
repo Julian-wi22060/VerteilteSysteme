@@ -1,27 +1,29 @@
+# Creates a Service for CouchDB
 apiVersion: v1
 kind: Service
 metadata:
-  name: couchdb
+  name: couchdb  # The name of the service
   labels:
-    app: couchdb
+    app: couchdb  # Labels for identifying the application
 spec:
-  type: NodePort
+  type: NodePort  # Exposes the service on a NodePort
   ports:
-    - port: 5984
-      name: http
+    - port: 5984  # The port the service listens on
+      name: http  # The name of the port
   selector:
-    app: couchdb
+    app: couchdb  # Selects pods with label "app=couchdb"
 ---
+# Creates a Service for the julian-microservice
 apiVersion: v1
 kind: Service
 metadata:
-  name: julian-microservice
+  name: julian-microservice  # The name of the service
   labels:
-    app: julian-microservice
+    app: julian-microservice  # Labels for identifying the application
 spec:
-  type: NodePort
+  type: NodePort  # Exposes the service on a NodePort
   ports:
-    - port: 5000
-      name: http
+    - port: 5000  # The port the service listens on
+      name: http  # The name of the port
   selector:
-    app: julian-microservice
+    app: julian-microservice  # Selects pods with label "app=julian-microservice"

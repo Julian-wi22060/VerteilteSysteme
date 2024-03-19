@@ -1,0 +1,8 @@
+{
+    "couchdb": {
+      "url": "http://couchdb:5984",
+      "database_name": "birthday_db",
+      "username": "admin",
+      "password": "student"
+    }
+  }

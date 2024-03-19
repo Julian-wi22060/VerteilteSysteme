@@ -4,7 +4,7 @@ info:
   description: Microservice for birthday-queries from CouchDB
   version: '1.0'
 paths:
-  /api/v1/get_data:
+  /api/v1/get_data: # Endpoint for querying birthdays by date
     get:
       summary: Query birthdays by date
       description: Dieser Endpunkt ermöglicht es Ihnen, anhand eines eingegebenen Monats (entsprechend der JavaScript-Konvention, wobei Januar 0 und Dezember 11 ist) und eines Tags nach einer Person zu suchen, die an diesem Datum Geburtstag hat. Der Endpunkt gibt eine erfolgreiche Antwort mit dem Statuscode 200 zurück, wenn eine Person mit dem Geburtstag gefunden wird. Wenn keine Person aus der Datenbank an diesem Datum Geburtstag hat, wird der Statuscode 204 zurückgegeben.
@@ -32,7 +32,7 @@ paths:
           description: Timeout
         '500':
           description: Internal server error
-  /health:
+  /health: # Endpoint for health check
     get:
       summary: Health check endpoint
       description: Dieser Endpunkt führt einen Gesundheitscheck des Microservices durch und gibt den Status des Microservices zurück. Wenn der Microservice ordnungsgemäß funktioniert und gesund ist, wird der Statuscode 200 zurückgegeben. Im Falle von Problemen oder Fehlern im Microservice wird der Statuscode 500 zurückgegeben.

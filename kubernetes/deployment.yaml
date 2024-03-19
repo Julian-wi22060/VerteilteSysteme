@@ -1,87 +1,91 @@
+# Creates a Deployment for CouchDB
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: couchdb
+  name: couchdb  # The name of the deployment
   labels:
-    app: couchdb
+    app: couchdb  # Labels for identifying the application
 spec:
   selector:
     matchLabels:
-      app: couchdb
+      app: couchdb  # Selects pods with label "app=couchdb"
   template:
     metadata:
       labels:
-        app: couchdb
+        app: couchdb  # Labels for the pods
     spec:
       containers:
-      - image: rennsause/dhbw-couch:1
-        imagePullPolicy: IfNotPresent
-        name: couchdb
+      - image: rennsause/dhbw-couch:1  # The Docker image for CouchDB including docker username
+        imagePullPolicy: IfNotPresent  # The image pull policy
+        name: couchdb  # The name of the container
         ports:
-        - containerPort: 5984
-        readinessProbe:
+        - containerPort: 5984  # The port CouchDB listens on
+        readinessProbe:  # Readiness probe for the container
           httpGet:
-            path: /_up
-            port: 5984
-          initialDelaySeconds: 5
-          periodSeconds: 30
+            path: /_up  # The endpoint for the readiness probe
+            port: 5984  # The port for the readiness probe
+          initialDelaySeconds: 5  # Delay before starting the probe
+          periodSeconds: 30  # Time interval between probes
 ---
+# Creates a Deployment for the Julian microservice
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: julian-microservice
+  name: julian-microservice  # The name of the deployment
   labels:
-    app: julian-microservice
+    app: julian-microservice  # Labels for identifying the application
 spec:
   selector:
     matchLabels:
-      app: julian-microservice
+      app: julian-microservice  # Selects pods with label "app=julian-microservice"
   template:
     metadata:
       labels:
-        app: julian-microservice
+        app: julian-microservice  # Labels for the pods
     spec:
       containers:
-        - image: julian-microservice
-          imagePullPolicy: Never
-          name: julian-microservice
+        - image: julian-microservice  # The Docker image for the microservice
+          imagePullPolicy: Never  # The image pull policy
+          name: julian-microservice  # The name of the container
           ports:
-            - containerPort: 4000
-          readinessProbe:
+            - containerPort: 4000  # The port the microservice listens on
+          readinessProbe:  # Readiness probe for the container
             httpGet:
-              path: /health
-              port: 4000
-            initialDelaySeconds: 5
-            periodSeconds: 30
-          env:
+              path: /health  # The endpoint for the readiness probe
+              port: 4000  # The port for the readiness probe
+            initialDelaySeconds: 5  # Delay before starting the probe
+            periodSeconds: 30  # Time interval between probes
+          env:  # Environment variables for the container
             - name: "KUBERNETES"
+              value: "True"
+            - name: "DOCKER"
               value: "True"
             - name: url
               valueFrom:
                 configMapKeyRef:
-                  name: config
-                  key: URL
+                  name: config  # The name of the ConfigMap
+                  key: URL  # The key for the URL
             - name: database_name
               valueFrom:
                 configMapKeyRef:
-                  name: config
-                  key: DB
+                  name: config  # The name of the ConfigMap
+                  key: DB  # The key for the database
             - name: password
               valueFrom:
                 secretKeyRef:
-                  name: credentials
-                  key: CRED1
+                  name: credentials  # The name of the Secret
+                  key: CRED1  # The key for the password
             - name: username
               valueFrom:
                 secretKeyRef:
-                  name: credentials
-                  key: CRED2
-          volumeMounts:
+                  name: credentials  # The name of the Secret
+                  key: CRED2  # The key for the username
+          volumeMounts:  # Volume mounts for the container
             - name: config-volume
-              mountPath: "/app/config_docker"
-              subPath: config_docker.json
-              readOnly: true
-      volumes:
+              mountPath: "/app/cfg"  # The path to mount the config file
+              subPath: "config_docker.json"  # The sub-path of the config file
+              #readOnly: true  # Commented out as readOnly is not set
+      volumes:  # Volumes for the pod
         - name: config-volume
           configMap:
-            name: config
+            name: config  # The name of the ConfigMap

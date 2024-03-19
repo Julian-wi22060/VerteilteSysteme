@@ -1,23 +1,24 @@
-# Verwenden Sie das Python Alpine-Image als Basisimage
-FROM  python:3.11.8-alpine3.19
+# Use the Python 3.11.8 image based on Alpine Linux 3.19
+FROM python:3.11.8-alpine3.19
 
-# Setzen Sie das Arbeitsverzeichnis im Container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Kopieren Sie die Anforderungen in das Arbeitsverzeichnis
+# Copy the requirements.txt file from the parent directory to the working directory
 COPY ../requirements.txt .
 
-# Installieren Sie die Anforderungen
+# Install Python dependencies listed in requirements.txt
 RUN pip install -r requirements.txt
 
-# Kopieren Sie den Rest des Codes in das Arbeitsverzeichnis
+# Copy the application source code from the parent directory's src folder to the working directory
 COPY ./../src/. .
 
-# Öffnen Sie den Port, auf dem Ihr Flask-Server läuft (z. B. 8000)
+# Expose port 4000 to allow external connections
 EXPOSE 4000
 
-# Befehl zum Ausführen Ihres Flask-Servers innerhalb des Containers
+# Define the command to run the application when the container starts
 CMD ["python", "app.py"]
 
+# commands for building flask-app container:
 # docker build -t flask-app .
-# docker run -d -p 8000:8000 flask-app
+# docker run -d -p 4000:4000 flask-app

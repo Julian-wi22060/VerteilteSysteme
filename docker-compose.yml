@@ -3,6 +3,7 @@ version: '3.9'
 services:
   flask-app:
     container_name: microservice
+    image: julian-microservice
     build:
       context: .
       dockerfile: src/Dockerfile
@@ -11,7 +12,7 @@ services:
     depends_on:
         - couchdb
     environment:
-      - PROD=True
+      - DOCKER=True
     volumes:
       - ./cfg/config_docker.json:/app/config_docker.json
 

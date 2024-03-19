@@ -14,7 +14,7 @@ spec:
         app: couchdb
     spec:
       containers:
-      - image: dhbw-couch:1
+      - image: rennsause/dhbw-couch:1
         imagePullPolicy: IfNotPresent
         name: couchdb
         ports:
@@ -29,20 +29,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: julianmicroservice
+  name: julian-microservice
   labels:
-    app: julianmicroservice
+    app: julian-microservice
 spec:
   selector:
     matchLabels:
-      app: julianmicroservice
+      app: julian-microservice
   template:
     metadata:
       labels:
-        app: julianmicroservice
+        app: julian-microservice
     spec:
       containers:
-        - image: verteiltesysteme-flask-app
+        - image: julian-microservice
           imagePullPolicy: Never
           name: julian-microservice
           ports:

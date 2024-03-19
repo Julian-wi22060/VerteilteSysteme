@@ -7,9 +7,9 @@ import json
 app = Flask(__name__)
 app.json.sort_keys = False
 
-if os.getenv('PROD') and os.getenv('KUBERNETES'):
+if os.getenv('DOCKER') and os.getenv('KUBERNETES'):
     CONFIG_FILE = os.path.join(os.path.dirname(__file__), 'config_docker.json')
-elif os.getenv('PROD'):
+elif os.getenv('DOCKER'):
     CONFIG_FILE = os.path.join(os.path.dirname(__file__), './config_docker.json')
 else:
     CONFIG_FILE = os.path.join(os.path.dirname(__file__), './../cfg/config.json')

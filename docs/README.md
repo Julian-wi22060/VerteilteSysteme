@@ -57,14 +57,22 @@ Im lokalen Betrieb und im Betrieb mit Docker ist die API-Dokumentation unter dem
 
 #### Kubernetes initialisieren<br>
 Erstellt den Docker Container zur Verwendung im Kubernetes Cluster.<br>
-1. `docker build -t julian . -f src/Dockerfile`<br><br>
+1. `minikube start`<br><br>
 Startet den Minikube Cluster.<br>
-2. `minikube start`<br><br>
+2. `eval $(minikube docker-env) `<br><br>
 Lädt das Docker Image in das Minikube-Cluster.<br>
-3. `minikube image load micronetes:latest`<br><br>
+3. `minikube image build -t julian-microservice:latest . -f src/Dockerfile`<br><br>
 --> Wenn der Fehler: Unable to resolve the current Docker CLI context "default" auftritt:<br>
 --> Setzt den Docker Kontext auf "default".<br>
---> `docker context use default`<br><br>
+--> `cd kubernetes`<br><br>
+4. `kubectl create -f configMap.yaml`
+5. `kubectl apply -f deployment.yaml`
+6. `kubectl apply -f service.yaml`
+7. `kubectl get pods` --> BILD EINFÜGEN
+8. `kubectl port-forward PODNAME 4000:4000`
+9. `minikube dashboard`
+10. `localhost:4000/swagger`
+
 Danach Schritt 3 wiederholen.<br><br>
 
 ---> Falls Schritt 3 bis 4 nicht funktioniert hat:<br>

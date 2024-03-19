@@ -2,31 +2,36 @@ from flask import Flask, request, jsonify, make_response
 from flask_swagger_ui import get_swaggerui_blueprint
 import requests
 import os
+import json
 
 app = Flask(__name__)
 app.json.sort_keys = False
 
-
-def config_path():
-    if os.environ.get('IS_PROD') is not None:
-        print(f'Running in production/docker mode: {os.environ.get("IS_PROD")}')
-        return 'config_docker.cfg'
-
-    elif os.getenv('KUBERNETES'):
-        configfile = os.path.join(os.path.dirname(_file), 'config_micro.json')
-        print(f'Running in kubernetes mode: {os.environ.get("KUBERNETES")}')
-        return '../kubernetes/deployment.yaml'
-
-    print('Running in development mode: True')
-    return '../cfg/config.cfg'
+if os.getenv('PROD') and os.getenv('KUBERNETES'):
+    CONFIG_FILE = os.path.join(os.path.dirname(__file__), 'config_docker.json')
+elif os.getenv('PROD'):
+    CONFIG_FILE = os.path.join(os.path.dirname(__file__), './config_docker.json')
+else:
+    CONFIG_FILE = os.path.join(os.path.dirname(__file__), './../cfg/config.json')
 
 
 # Laden der Konfigurationsdatei
-config_path = config_path()
-app.config.from_pyfile(config_path)
+def load_config():
+    with open(CONFIG_FILE) as config_file:
+        config = json.load(config_file)
+    return config
 
-# Port-Forwarding des CouchDB-Containers
-app.config['DB_NAME'] = 'http://localhost:5984/birthday_db'
+
+def get_couchdb_credentials():
+    config = load_config()
+    couchdb_config = config.get('couchdb', {})
+    return couchdb_config.get('username'), couchdb_config.get('password')
+
+
+def get_couchdb_url_and_database():
+    config = load_config()
+    couchdb_config = config.get('couchdb', {})
+    return couchdb_config.get('url'), couchdb_config.get('database_name')
 
 
 # Funktion für den Daten-Endpoint
@@ -45,12 +50,14 @@ def get_data():
         "fields": ["first", "name", "prof", "year", "month", "day"],
         "sort": [{"year": "asc"}]
     }
-    auth = (app.config['COUCHDB_USER'], app.config['COUCHDB_PASSWORD'])
-
-    db_url = app.config['DB_URL'] + '/_find'
 
     try:
-        response = requests.post(db_url, json=request_data, headers=headers, auth=auth, timeout=2)
+        username, password = get_couchdb_credentials()
+        url, database_name = get_couchdb_url_and_database()
+
+        response = requests.post(f"{url}/{database_name}/_find", json=request_data, headers=headers,
+                                 auth=(username, password), timeout=2)
+
         data = response.json()
 
         # Überprüfe, ob die Abfrage einen Treffer ergibt

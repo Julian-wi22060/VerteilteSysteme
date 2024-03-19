@@ -14,7 +14,7 @@ spec:
         app: couchdb
     spec:
       containers:
-      - image: rennsause/dhbw-couch:1
+      - image: dhbw-couch:1
         imagePullPolicy: IfNotPresent
         name: couchdb
         ports:
@@ -42,45 +42,46 @@ spec:
         app: julianmicroservice
     spec:
       containers:
-      - image: verteiltesysteme-flask-app
-        imagePullPolicy: Never
-        name: julian-microservice
-        ports:
-        - containerPort: 4000
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 4000
-          initialDelaySeconds: 5
-          periodSeconds: 30
-        volumeMounts:
-          - name: config-map
-            mountPath: "/app/kubernetes"
-            subPath: "kub.yaml"
-        env:
-        - name: "KUBERNETES"
-          value: "True"
-        - name: url
-          valueFrom:
-            configMapKeyRef:
-              name: config
-              key: URL
-        - name: database_name
-          valueFrom:
-            configMapKeyRef:
-              name: config
-              key: DB
-        - name: password
-          valueFrom:
-            secretKeyRef:
-              name: credentials
-              key: CRED1
-        - name: username
-          valueFrom:
-            secretKeyRef:
-              name: credentials
-              key: CRED2
+        - image: verteiltesysteme-flask-app
+          imagePullPolicy: Never
+          name: julian-microservice
+          ports:
+            - containerPort: 4000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          env:
+            - name: "KUBERNETES"
+              value: "True"
+            - name: url
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: URL
+            - name: database_name
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DB
+            - name: password
+              valueFrom:
+                secretKeyRef:
+                  name: credentials
+                  key: CRED1
+            - name: username
+              valueFrom:
+                secretKeyRef:
+                  name: credentials
+                  key: CRED2
+          volumeMounts:
+            - name: config-volume
+              mountPath: "/app/config_docker"
+              subPath: config_docker.json
+              readOnly: true
       volumes:
-        - name: config-map
+        - name: config-volume
           configMap:
             name: config

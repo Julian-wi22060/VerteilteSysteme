@@ -11,9 +11,9 @@ services:
     depends_on:
         - couchdb
     environment:
-      - IS_PROD=True
+      - PROD=True
     volumes:
-      - ./cfg/config_docker.cfg:/app/config_docker.cfg
+      - ./cfg/config_docker.json:/app/config_docker.json
 
   couchdb:
     container_name: couchdb
